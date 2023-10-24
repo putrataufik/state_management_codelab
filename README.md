@@ -5,3 +5,5 @@ state disini mirip seperti useState di reactJs cuma bedanya initialisasinya itu 
 
 
 stateful disini akan banyak digunakan untuk applikasi yang dinamis yang dimana, tampilan akan berubah-ubah
+
+mungkin bisa juga menggunakan statefull ketika menggunakan API 
