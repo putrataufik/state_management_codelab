@@ -31,8 +31,8 @@ class _CounterWidget extends State<CounterWidgetState> {
 
   int counter = 0; // yang pertama itu kita bikin variable dlu
   Color buttonColor = Colors.red;
-  double lebar = 30;
-  double tinggi = 30;
+  double lebar = 25;
+  double tinggi = 35;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -48,8 +48,8 @@ class _CounterWidget extends State<CounterWidgetState> {
                 (){
                   counter ++; // tinggal kita bikin kek bgini :)
                   buttonColor = buttonColor == Colors.red ? Colors.blue : Colors.red;
-                  lebar + 10;
-                  tinggi + 10;
+                  lebar += 10;
+                  tinggi += 10;
                 }
                 );
             },
@@ -65,10 +65,13 @@ class _CounterWidget extends State<CounterWidgetState> {
           ElevatedButton(onPressed: (){
             setState(() {
               counter = 0;  
-              lebar = 10;
-              tinggi = 10;
+              lebar = 25;
+              tinggi = 35;
             });
           }, 
+          style: ElevatedButton.styleFrom(
+            minimumSize: Size(25, 35)
+          ),
           child: Text('reset'),
           ),
         ],
