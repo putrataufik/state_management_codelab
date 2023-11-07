@@ -1,81 +1,86 @@
 import 'package:flutter/material.dart';
+import 'counter_page.dart';
+import 'history_page.dart';
+import 'home_page.dart';
 
 void main() {
-  runApp(MyStatelessApp());
+  runApp(MyApp());
 }
 
-class MyStatelessApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: Text('Stateless Counter App')),
-        body: CounterWidgetState(),
+      title: 'Aplikasi Saya',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: App(), 
     );
   }
 }
 
-
-// disini saya buat class baru yang extend ke StatefulWidget agar class CounterWidget bisa
-// menggunakan function createState.
-class CounterWidgetState extends StatefulWidget {
+class App extends StatefulWidget {
   @override
-  _CounterWidget createState() => _CounterWidget();
+  _AppState createState() => _AppState();
 }
 
-// nah disini class _CounterWidget menggunakan extends State dari CounterWidgetState yang sudah
-// di deklarasi bahwa _counterWidget sudah menggunakan function createState
-class _CounterWidget extends State<CounterWidgetState> {
-  // pas sudah di atur agar class _CounterWidget bisa menggunakan StateFull
+class _AppState extends State<App> {
+  int _currentIndex = 0;
+  int _previousIndex = 0;
 
-  int counter = 0; // yang pertama itu kita bikin variable dlu
-  Color buttonColor = Colors.red;
-  double lebar = 25;
-  double tinggi = 35;
+  final List<Widget> _pages = [HomeWidget(), CounterWidgetList(), HistoryPage()];
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _previousIndex = _currentIndex;
+      _currentIndex = index;
+    });
+  }
+
+  void _backLogic() {
+    setState(() {
+      if (_previousIndex != _currentIndex) {
+        // Kembali ke page sebelumnya
+        _currentIndex = _previousIndex;
+      } else {
+        // Kembali ke Home Page kalo di ada d halaman Counter atau History
+        _currentIndex = 0;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text('Counter Value: $counter'), // ambil value yang ada di variable counter
-          SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              setState( // nah disini kita sudah bisa menggunakan setState karena kita sudah extend class nya 
-              // menggunakan CounterWidgetState tadi
-                (){
-                  counter ++; // tinggal kita bikin kek bgini :)
-                  buttonColor = buttonColor == Colors.red ? Colors.blue : Colors.red;
-                  lebar += 10;
-                  tinggi += 10;
-                }
-                );
-            },
-            child: Text('Increment'),
-            style: ElevatedButton.styleFrom(
-              primary: buttonColor,
-
-               
-              minimumSize: Size(lebar, tinggi),
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Aplikasi Saya'),
+      ),
+      body: _pages[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: _onTabTapped,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
-          SizedBox(height: 10,),
-          ElevatedButton(onPressed: (){
-            setState(() {
-              counter = 0;  
-              lebar = 25;
-              tinggi = 35;
-            });
-          }, 
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(25, 35)
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'Counter',
           ),
-          child: Text('reset'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: 'History',
           ),
         ],
       ),
+      floatingActionButton: _currentIndex == 0
+          ? null
+          : FloatingActionButton(
+              onPressed: _backLogic,
+              child: Icon(Icons.arrow_back),
+            ),
     );
   }
 }
